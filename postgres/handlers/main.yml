@@ -1,0 +1,5 @@
+---
+- name: Reload Postgres
+  service:
+    name: postgres
+    state: reloaded

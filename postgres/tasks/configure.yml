@@ -1,0 +1,24 @@
+---
+- name: Put postgresql.conf
+  template:
+    src: var/lib/pgsql/data/postgresql.conf.j2
+    dest: "{{ postgres_data_dir }}/postgresql.conf"
+    owner: root
+    group: root
+    mode: 644
+  notify: Reload Postgres
+
+- name: Put pg_hba.conf
+  template:
+    src: var/lib/pgsql/data/pg_hba.conf.j2
+    dest: "{{ postgres_data_dir }}/pg_hba.conf"
+    owner: root
+    group: root
+    mode: 644
+  notify: Reload Postgres
+
+- name: Enable and run postgres
+  service:
+    name: postgresql
+    state: started
+    enabled: yes

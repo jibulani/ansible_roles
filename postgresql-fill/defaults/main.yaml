@@ -1,0 +1,5 @@
+postgres_postgres_password:
+
+postgres_test_db: addressbook
+postgres_test_username: user28
+postgres_test_user_password:

@@ -1,0 +1,37 @@
+---
+- name: Install Postgres
+  yum:
+    name: postgresql-server
+    state: present
+    update_cache: yes
+
+- name: Ensure db data directory exists
+  file:
+    path: "{{ postgres_data_dir }}"
+    owner: postgres
+    group: postgres
+    state: directory
+    mode: 0700
+
+- name: Get db exist status
+  stat:
+    path: "{{ postgres_data_dir }}/PG_VERSION"
+  register: pgdata
+
+- name: Ensure PostgreSQL database is initialized.
+  command: "bash -c 'initdb -D {{ postgres_data_dir }}'"
+  become: yes
+  become_user: postgres
+  become_method: sudo
+  when: not pgdata.stat.exists
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: Install python-pip
+  yum:
+    name: python-pip
+    state: present
+
+- name: Install psycopg2
+  pip:
+    name: psycopg2
